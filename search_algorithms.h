@@ -16,4 +16,7 @@ typedef struct {
   int algo_id;
 } SearchState;
 
+void linear_search_init(void *state, int *array, size_t size, int target);
+bool linear_search_step(void *state);
+
 #endif // !SEARCH_ALGORITHMS_H
