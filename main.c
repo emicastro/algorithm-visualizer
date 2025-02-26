@@ -87,10 +87,12 @@ int main(void) {
       if (algorithms[selected_algo].type == ALGO_SORT) {
         generate_random_array(array, ARRAY_SIZE);
         current_state = &sort_state;
+        speed = 100; // Default for sorting
       } else {
         generate_sorted_array(array, ARRAY_SIZE);
         target = array[rand() % ARRAY_SIZE];
         current_state = &search_state;
+        speed = 500; // Default for searching
       }
       algorithms[selected_algo].init(current_state, array, ARRAY_SIZE, target);
       run_visualization();
@@ -99,10 +101,12 @@ int main(void) {
       if (algorithms[selected_algo].type == ALGO_SORT) {
         generate_random_array(array, ARRAY_SIZE);
         current_state = &sort_state;
+        speed = 100;
       } else {
         generate_sorted_array(array, ARRAY_SIZE);
         target = array[rand() % ARRAY_SIZE];
         current_state = &search_state;
+        speed = 500;
       }
       algorithms[selected_algo].init(current_state, array, ARRAY_SIZE, target);
       step_visualization();
