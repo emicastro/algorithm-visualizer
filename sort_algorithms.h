@@ -7,6 +7,7 @@
 typedef struct {
   int *array;
   size_t size;
+  size_t index; // Current index
   bool done;
   int algo_id;
 } SortState;

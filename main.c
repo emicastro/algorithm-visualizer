@@ -126,3 +126,32 @@ void draw_menu(void) {
   printw("r: run, t: step, q: quit\n");
   refresh();
 }
+
+void draw_sort_state(const SortState *state) {
+  printw("Sorting:\n");
+  for (size_t i = 0; i < state->size; i++) {
+    if (i == state->index || (state->algo_id == 0 && i == state->index + 1)) {
+      attron(COLOR_PAIR(1));
+    }
+    printw("%2d ", state->array[i]);
+    attroff(COLOR_PAIR(1));
+  }
+  printw("\n");
+}
+
+void draw_search_state(const SearchState *state) {
+  printw("Searching for %d:\n", state->target);
+  for (size_t i = 0; i < state->size; i++) {
+    if (i == state->current_index ||
+        (state->algo_id == 1 && (i == state->low || i == state->high))) {
+      attron(COLOR_PAIR(1));
+    }
+    printw("%2d ", state->array[i]);
+    attroff(COLOR_PAIR(1));
+  }
+  if (state->found) {
+    printw("\nFound at index %zu\n", state->current_index);
+  } else if (state->done) {
+    printw("\nNot found\n");
+  }
+}
