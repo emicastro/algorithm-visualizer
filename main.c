@@ -29,4 +29,10 @@ int speed = 100;          // Visualization speed in milliseconds
 int array[ARRAY_SIZE];    // Array to visualize
 int target;               // Target value for searching
 
+// Function prototypes
+void draw_menu(void);
+void draw_visualization(void);
+void run_visualization(void);
+void step_visualization(void);
+
 int main(void) {}
