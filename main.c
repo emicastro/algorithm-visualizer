@@ -19,7 +19,7 @@ typedef struct {
 
 // List of available algorithms
 Algorithm algorithms[] = {
-
+    {"BubbleSort", ALGO_SORT, bubble_sort_init, bubble_sort_step},
 };
 
 const size_t num_algorithms = sizeof(algorithms) / sizeof(algorithms[0]);
