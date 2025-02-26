@@ -1,5 +1,10 @@
+#include "search_algorithms.h"
+#include "sort_algorithms.h"
+#include "utils.h"
+#include <ncurses.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <time.h>
 
 // Enum for algorithm types
 typedef enum { ALGO_SORT, ALGO_SEARCH } AlgorithmType;
@@ -20,6 +25,8 @@ Algorithm algorithms[] = {
 const size_t num_algorithms = sizeof(algorithms) / sizeof(algorithms[0]);
 
 // State variables
+SortState sort_state;
+SearchState search_state;
 void *current_state;
 
 // Global variables
@@ -31,8 +38,75 @@ int target;               // Target value for searching
 
 // Function prototypes
 void draw_menu(void);
+void draw_sort_state(const SortState *state);
+void draw_search_state(const SearchState *state);
 void draw_visualization(void);
 void run_visualization(void);
 void step_visualization(void);
 
-int main(void) {}
+int main(void) {
+  // Initialize ncurses
+  initscr();
+  start_color();
+  init_pair(1, COLOR_RED, COLOR_BLACK); // For highlighting
+  cbreak();
+  noecho();
+  keypad(stdscr, TRUE);
+
+  // Seed random number generator
+  srand((unsigned)time(NULL));
+
+  bool quit = false;
+  while (!quit) {
+    draw_menu();
+    int ch = getch();
+    switch (ch) {
+    case 'q':
+      quit = true;
+      break;
+    case KEY_UP:
+      if (selected_algo > 0)
+        selected_algo--;
+      break;
+    case KEY_DOWN:
+      if (selected_algo < num_algorithms - 1)
+        selected_algo++;
+      break;
+    case '+':
+      speed += 10;
+      break;
+    case '-':
+      if (speed > 10)
+        speed -= 10;
+      break;
+    case 'r':
+      // Prepare array and state
+      if (algorithms[selected_algo].type == ALGO_SORT) {
+        generate_random_array(array, ARRAY_SIZE);
+        current_state = &sort_state;
+      } else {
+        generate_sorted_array(array, ARRAY_SIZE);
+        target = array[rand() % ARRAY_SIZE];
+        current_state = &search_state;
+      }
+      algorithms[selected_algo].init(current_state, array, ARRAY_SIZE, target);
+      run_visualization();
+      break;
+    case 't':
+      if (algorithms[selected_algo].type == ALGO_SORT) {
+        generate_random_array(array, ARRAY_SIZE);
+        current_state = &sort_state;
+      } else {
+        generate_sorted_array(array, ARRAY_SIZE);
+        target = array[rand() % ARRAY_SIZE];
+        current_state = &search_state;
+      }
+      algorithms[selected_algo].init(current_state, array, ARRAY_SIZE, target);
+      step_visualization();
+      break;
+    }
+  }
+
+  endwin();
+  return 0;
+};
