@@ -143,7 +143,7 @@ void draw_sort_state(const SortState *state) {
     printw("%2d ", state->array[i]);
     attroff(COLOR_PAIR(1));
   }
-  printw("\n");
+  printw("\nSteps: %zu\n", state->steps);
 }
 
 void draw_search_state(const SearchState *state) {
@@ -161,6 +161,7 @@ void draw_search_state(const SearchState *state) {
   } else if (state->done) {
     printw("\nNot found\n");
   }
+  printw("\nSteps: %zu\n", state->steps);
 }
 
 void draw_visualization(void) {

@@ -13,7 +13,8 @@ typedef struct {
   int key;        // Used by Insertion Sort
   bool swapped;   // Used by Bubble Sort
   bool done;
-  int algo_id; // 0 for Bubble Sort
+  int algo_id;  // 0 for Bubble Sort
+  size_t steps; // Step counter
 } SortState;
 
 void bubble_sort_init(void *state, int *array, size_t size, int target);

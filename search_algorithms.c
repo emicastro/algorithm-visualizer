@@ -9,10 +9,12 @@ void linear_search_init(void *state, int *array, size_t size, int target) {
   s->found = false;
   s->done = (size == 0);
   s->algo_id = 0;
+  s->steps = 0;
 }
 
 bool linear_search_step(void *state) {
   SearchState *s = (SearchState *)state;
+  s->steps++;
   if (s->done)
     return true;
 
@@ -38,10 +40,12 @@ void binary_search_init(void *state, int *array, size_t size, int target) {
   s->found = false;
   s->done = (size == 0);
   s->algo_id = 1;
+  s->steps = 0;
 }
 
 bool binary_search_step(void *state) {
   SearchState *s = (SearchState *)state;
+  s->steps++;
   if (s->done)
     return true;
 

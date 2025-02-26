@@ -10,10 +10,12 @@ void bubble_sort_init(void *state, int *array, size_t size, int target) {
   s->swapped = false;
   s->done = false;
   s->algo_id = 0;
+  s->steps = 0;
 }
 
 bool bubble_sort_step(void *state) {
   SortState *s = (SortState *)state;
+  s->steps++;
   if (s->done)
     return true;
 
@@ -50,10 +52,12 @@ void insertion_sort_init(void *state, int *array, size_t size, int target) {
   s->index = 1;
   s->done = (size <= 1);
   s->algo_id = 1;
+  s->steps = 0;
 }
 
 bool insertion_sort_step(void *state) {
   SortState *s = (SortState *)state;
+  s->steps++;
   if (s->done)
     return true;
 

@@ -14,6 +14,7 @@ typedef struct {
   bool found;
   bool done;
   int algo_id;
+  size_t steps; // Step counter
 } SearchState;
 
 void linear_search_init(void *state, int *array, size_t size, int target);
