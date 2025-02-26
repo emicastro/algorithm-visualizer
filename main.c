@@ -12,4 +12,21 @@ typedef struct {
   bool (*step)(void *state);
 } Algorithm;
 
+// List of available algorithms
+Algorithm algorithms[] = {
+
+};
+
+const size_t num_algorithms = sizeof(algorithms) / sizeof(algorithms[0]);
+
+// State variables
+void *current_state;
+
+// Global variables
+size_t selected_algo = 0; // Currently selected algorithm index
+int speed = 100;          // Visualization speed in milliseconds
+#define ARRAY_SIZE 20     // Fixed array size for simplicity
+int array[ARRAY_SIZE];    // Array to visualize
+int target;               // Target value for searching
+
 int main(void) {}
