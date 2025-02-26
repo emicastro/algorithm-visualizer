@@ -110,3 +110,19 @@ int main(void) {
   endwin();
   return 0;
 };
+
+void draw_menu(void) {
+  clear();
+  printw("Select Algorithm:\n");
+  for (size_t i = 0; i < num_algorithms; i++) {
+    if (i == selected_algo) {
+      attron(A_REVERSE);
+    }
+    printw("%zu. %s\n", i + 1, algorithms[i].name);
+    attroff(A_REVERSE);
+  }
+  printw("\nSpeed: %d ms\n", speed);
+  printw("Controls: UP/DOWN to select, +/- to adjust speed\n");
+  printw("r: run, t: step, q: quit\n");
+  refresh();
+}
