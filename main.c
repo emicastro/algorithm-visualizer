@@ -155,3 +155,42 @@ void draw_search_state(const SearchState *state) {
     printw("\nNot found\n");
   }
 }
+
+void draw_visualization(void) {
+  clear();
+  if (algorithms[selected_algo].type == ALGO_SORT) {
+    draw_sort_state(&sort_state);
+  } else {
+    draw_search_state(&search_state);
+  }
+  refresh();
+}
+
+void run_visualization(void) {
+  bool done = false;
+  while (!done) {
+    done = algorithms[selected_algo].step(current_state);
+    draw_visualization();
+    timeout(speed);
+    int ch = getch();
+    if (ch == 's')
+      break;
+  }
+  printw("\nFinished. Press any key to continue.");
+  timeout(-1); // Blocking
+  getch();
+}
+
+void step_visualization(void) {
+  bool done = false;
+  while (!done) {
+    draw_visualization();
+    printw("\nPress 't' to step, 'q' to return.");
+    int ch = getch();
+    if (ch == 't') {
+      done = algorithms[selected_algo].step(current_state);
+    } else if (ch == 'q') {
+      break;
+    }
+  }
+}
