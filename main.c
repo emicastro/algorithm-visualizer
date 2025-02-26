@@ -22,6 +22,7 @@ Algorithm algorithms[] = {
     {"BubbleSort", ALGO_SORT, bubble_sort_init, bubble_sort_step},
     {"InsertionSort", ALGO_SORT, insertion_sort_init, insertion_sort_step},
     {"Linear Search", ALGO_SEARCH, linear_search_init, linear_search_step},
+    {"Binary Search", ALGO_SEARCH, binary_search_init, binary_search_step},
 };
 
 const size_t num_algorithms = sizeof(algorithms) / sizeof(algorithms[0]);
