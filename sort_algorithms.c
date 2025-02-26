@@ -40,3 +40,37 @@ bool bubble_sort_step(void *state) {
   }
   return s->done;
 }
+
+void insertion_sort_init(void *state, int *array, size_t size, int target) {
+  (void)target; // Unused
+  SortState *s = (SortState *)state;
+  s->array = array;
+  s->size = size;
+  s->key_pos = 1; // Start with second element
+  s->index = 1;
+  s->done = (size <= 1);
+  s->algo_id = 1;
+}
+
+bool insertion_sort_step(void *state) {
+  SortState *s = (SortState *)state;
+  if (s->done)
+    return true;
+
+  if (s->index == s->key_pos) {
+    s->key = s->array[s->key_pos];
+    s->index--;
+  } else if (s->index > 0 && s->array[s->index - 1] > s->key) {
+    s->array[s->index] = s->array[s->index - 1];
+    s->index--;
+  } else {
+    s->array[s->index] = s->key;
+    s->key_pos++;
+    if (s->key_pos >= s->size) {
+      s->done = true;
+    } else {
+      s->index = s->key_pos;
+    }
+  }
+  return s->done;
+}
