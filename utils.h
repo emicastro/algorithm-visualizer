@@ -5,5 +5,6 @@
 
 void generate_random_array(int *array, size_t size);
 void generate_sorted_array(int *array, size_t size);
+int find_max(int *array, size_t size);
 
 #endif // !UTILS_H

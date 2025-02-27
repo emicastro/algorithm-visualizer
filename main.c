@@ -1,10 +1,12 @@
 #include "search_algorithms.h"
 #include "sort_algorithms.h"
 #include "utils.h"
+#include <locale.h>
 #include <ncurses.h>
 #include <stdbool.h>
 #include <stdlib.h>
 #include <time.h>
+#include <wchar.h>
 
 // Enum for algorithm types
 typedef enum { ALGO_SORT, ALGO_SEARCH } AlgorithmType;
@@ -35,19 +37,21 @@ void *current_state;
 // Global variables
 size_t selected_algo = 0; // Currently selected algorithm index
 int speed = 100;          // Visualization speed in milliseconds
-#define ARRAY_SIZE 20     // Fixed array size for simplicity
+#define ARRAY_SIZE 10     // Fixed array size for simplicity
 int array[ARRAY_SIZE];    // Array to visualize
 int target;               // Target value for searching
 
 // Function prototypes
 void draw_menu(void);
-void draw_sort_state(const SortState *state);
+void draw_sort_bars(const SortState *state);
 void draw_search_state(const SearchState *state);
 void draw_visualization(void);
 void run_visualization(void);
 void step_visualization(void);
+void print_array(void);
 
 int main(void) {
+  setlocale(LC_CTYPE, "");
   // Initialize ncurses
   initscr();
   start_color();
@@ -134,14 +138,26 @@ void draw_menu(void) {
   refresh();
 }
 
-void draw_sort_state(const SortState *state) {
-  printw("Sorting:\n");
-  for (size_t i = 0; i < state->size; i++) {
-    if (i == state->index || (state->algo_id == 0 && i == state->index + 1)) {
-      attron(COLOR_PAIR(1));
+void draw_sort_bars(const SortState *state) {
+  printw("Sorting: ");
+  print_array();
+  int max_val = find_max(state->array, state->size);
+  /* int max_height = 10; // Maximum bar height */
+  printw("\n");
+  for (int row = state->size; row >= 1; row--) {
+    printw("    ");
+    for (size_t i = 0; i < state->size; i++) {
+      bool highlight =
+          (state->algo_id == 0 &&
+           (i == state->index || i == state->index + 1)) ||
+          (state->algo_id == 1 && (i == state->key_pos || i == state->index));
+      wchar_t ch = (state->array[i] >= (row * max_val / state->size))
+                       ? (highlight ? 0x25A4 : 0x2588)
+                       : ' ';
+      printw("%lc ", ch);
     }
-    printw("%2d ", state->array[i]);
-    attroff(COLOR_PAIR(1));
+    printw(" %d", row);
+    printw("\n");
   }
   printw("\nSteps: %zu\n", state->steps);
 }
@@ -167,7 +183,7 @@ void draw_search_state(const SearchState *state) {
 void draw_visualization(void) {
   clear();
   if (algorithms[selected_algo].type == ALGO_SORT) {
-    draw_sort_state(&sort_state);
+    draw_sort_bars(&sort_state);
   } else {
     draw_search_state(&search_state);
   }
@@ -201,4 +217,11 @@ void step_visualization(void) {
       break;
     }
   }
+}
+
+void print_array(void) {
+  for (size_t i = 0; i < (sizeof array / sizeof array[0]); i++) {
+    printw("%d ", array[i]);
+  }
+  printw("\n");
 }
