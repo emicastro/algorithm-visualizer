@@ -4,7 +4,7 @@
 
 void generate_random_array(int *array, size_t size) {
   for (size_t i = 0; i < size; i++) {
-    array[i] = rand() % 40; // Values 0-39
+    array[i] = rand() % 30; // Values 0-29 for easier visualizations
   }
 }
 

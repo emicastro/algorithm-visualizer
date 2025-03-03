@@ -37,7 +37,7 @@ void *current_state;
 // Global variables
 size_t selected_algo = 0; // Currently selected algorithm index
 int speed = 100;          // Visualization speed in milliseconds
-#define ARRAY_SIZE 10     // Fixed array size for simplicity
+#define ARRAY_SIZE 20     // Fixed array size for simplicity
 int array[ARRAY_SIZE];    // Array to visualize
 int target;               // Target value for searching
 
@@ -94,12 +94,10 @@ int main(void) {
       if (algorithms[selected_algo].type == ALGO_SORT) {
         generate_random_array(array, ARRAY_SIZE);
         current_state = &sort_state;
-        speed = 150; // Default for sorting
       } else {
         generate_sorted_array(array, ARRAY_SIZE);
         target = array[rand() % ARRAY_SIZE];
         current_state = &search_state;
-        speed = 500; // Slower default for searching
       }
       algorithms[selected_algo].init(current_state, array, ARRAY_SIZE, target);
       run_visualization();
@@ -108,12 +106,10 @@ int main(void) {
       if (algorithms[selected_algo].type == ALGO_SORT) {
         generate_random_array(array, ARRAY_SIZE);
         current_state = &sort_state;
-        speed = 100;
       } else {
         generate_sorted_array(array, ARRAY_SIZE);
         target = array[rand() % ARRAY_SIZE];
         current_state = &search_state;
-        speed = 500;
       }
       algorithms[selected_algo].init(current_state, array, ARRAY_SIZE, target);
       step_visualization();
