@@ -72,10 +72,12 @@ int main(void) {
       quit = true;
       break;
     case KEY_UP:
+    case 'k':
       if (selected_algo > 0)
         selected_algo--;
       break;
     case KEY_DOWN:
+    case 'j':
       if (selected_algo < num_algorithms - 1)
         selected_algo++;
       break;
@@ -91,7 +93,7 @@ int main(void) {
       if (algorithms[selected_algo].type == ALGO_SORT) {
         generate_random_array(array, ARRAY_SIZE);
         current_state = &sort_state;
-        speed = 100; // Default for sorting
+        speed = 150; // Default for sorting
       } else {
         generate_sorted_array(array, ARRAY_SIZE);
         target = array[rand() % ARRAY_SIZE];
@@ -133,7 +135,7 @@ void draw_menu(void) {
     attroff(A_REVERSE);
   }
   printw("\nSpeed: %d ms\n", speed);
-  printw("Controls: UP/DOWN to select, +/- to adjust speed\n");
+  printw("Controls: UP/DOWN or k/j to select, +/- to adjust speed\n");
   printw("r: run, t: step, q: quit\n");
   refresh();
 }
@@ -141,17 +143,19 @@ void draw_menu(void) {
 void draw_sort_bars(const SortState *state) {
   printw("Sorting: ");
   print_array();
+  printw("state->size: %d\n", state->size);
   int max_val = find_max(state->array, state->size);
-  /* int max_height = 10; // Maximum bar height */
+  int max_height = max_val; // Maximum bar height
   printw("\n");
-  for (int row = state->size; row >= 1; row--) {
+  for (int row = max_height; row >= 1; row--) {
     printw("    ");
     for (size_t i = 0; i < state->size; i++) {
       bool highlight =
           (state->algo_id == 0 &&
            (i == state->index || i == state->index + 1)) ||
           (state->algo_id == 1 && (i == state->key_pos || i == state->index));
-      wchar_t ch = (state->array[i] >= (row * max_val / state->size))
+
+      wchar_t ch = (state->array[i] >= (row * max_val / max_height))
                        ? (highlight ? 0x25A4 : 0x2588)
                        : ' ';
       printw("%lc ", ch);
