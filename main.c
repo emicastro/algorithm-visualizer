@@ -55,7 +55,8 @@ int main(void) {
   // Initialize ncurses
   initscr();
   start_color();
-  init_pair(1, COLOR_RED, COLOR_BLACK); // For highlighting
+  init_pair(1, COLOR_RED, COLOR_BLACK);   // For highlighting
+  init_pair(2, COLOR_GREEN, COLOR_BLACK); // For found target
   cbreak();
   noecho();
   keypad(stdscr, TRUE);
@@ -98,7 +99,7 @@ int main(void) {
         generate_sorted_array(array, ARRAY_SIZE);
         target = array[rand() % ARRAY_SIZE];
         current_state = &search_state;
-        speed = 500; // Default for searching
+        speed = 500; // Slower default for searching
       }
       algorithms[selected_algo].init(current_state, array, ARRAY_SIZE, target);
       run_visualization();
@@ -169,12 +170,18 @@ void draw_sort_bars(const SortState *state) {
 void draw_search_state(const SearchState *state) {
   printw("Searching for %d:\n", state->target);
   for (size_t i = 0; i < state->size; i++) {
-    if (i == state->current_index ||
-        (state->algo_id == 1 && (i == state->low || i == state->high))) {
-      attron(COLOR_PAIR(1));
+    if (state->found && i == state->current_index) {
+      attron(COLOR_PAIR(2)); // Green for found
+    } else if (i == state->current_index ||
+               (state->algo_id == 1 && (i == state->low || i == state->high))) {
+      attron(COLOR_PAIR(1)); // Red for current or bounds
     }
     printw("%2d ", state->array[i]);
-    attroff(COLOR_PAIR(1));
+    if (state->found && i == state->current_index) {
+      attroff(COLOR_PAIR(2));
+    } else {
+      attroff(COLOR_PAIR(1));
+    }
   }
   if (state->found) {
     printw("\nFound at index %zu\n", state->current_index);
